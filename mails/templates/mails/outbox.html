@@ -1,0 +1,70 @@
+{% extends 'base_layout.html' %}
+{% block title %}
+    <title>Giden Kutusu</title>
+{% endblock %}
+{% block content %}
+    <div class="container-fluid mt-0" >
+        <div class="container border-bottom border-info mb-2">
+            <div class="row align-items-center mt-1 mb-1">
+                <input class='col-1 ' name='message-checkbox' type="checkbox" onclick="toggle(this)">
+                 <a href='a'><i class="fas fa-trash-alt "></i></a>
+            </div>
+        </div>
+        <nav>
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+              <a class="nav-item nav-link active text-info" id="nav-out_all-tab" data-toggle="tab" href="#nav-out_all" role="tab" aria-controls="nav-out_all" aria-selected="true">Gönderilen Mesajlar</a>
+              <a class="nav-item nav-link text-warning" id="nav-my_out-tab" data-toggle="tab" href="#nav-my_out" role="tab" aria-controls="nav-my_out" aria-selected="false">Benim Gönderdiğim Mesajlarlar</a>
+            </div>
+        </nav>
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="nav-out_all" role="tabpanel" aria-labelledby="nav-out_all-tab">
+                <form>
+                    {% for mail in outgoing_mails %}
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <a  class='row' 
+                            href="/mails/detail-mail/{{mail.uid}}/")>
+                                <input class='col-1 list__checkbox' name='message-checkbox' type="checkbox">
+                                <p class="col-2 list__name">{{ mail.to_email}}</p>
+                                <p class="col-6 list__subject">{{ mail.subject}}</p>
+                                <p class="col-3 lis__date">{{ mail.date}}</p>
+                            </a>
+                        </li>
+                    </ul>    
+                    {% endfor %}
+                </form>
+            </div>
+            <div class="tab-pane fade" id="nav-my_out" role="tabpanel" aria-labelledby="nav-my_out-tab">
+                <form>
+                    {% for mail in y %}
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <a  class='row' 
+                            href="/mails/detail-mail/{{mail.0.uid}}/")>
+                                <input class='col-1 list__checkbox' name='message-checkbox' type="checkbox">
+                                <p class="col-2 list__name">{{ mail.0}}</p>
+                                <p class="col-5 list__subject">{{ mail.0.subject}}</p>
+                                <div class="col-3 d-flex" >
+                                        {{mail.reply_persons}}
+                                    {% for person in mail.1 %}
+                                        <span>{{person.full_name}}</span>
+                                    {% endfor%}
+                                </div>
+                                <p class="col-1 lis__date">{{ mail.0.date}}</p>
+                            </a>
+                        </li>
+                    </ul>    
+                    {% endfor %}
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        const toggle = (e)=>{
+            checkboxes = document.getElementsByName('message-checkbox');
+            for(let i = 0 ; i<checkboxes.length ; i++)
+                checkboxes[i].checked = e.checked;
+           
+        }
+    </script>  
+{% endblock %}
