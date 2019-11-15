@@ -1,0 +1,21 @@
+{% extends 'base_layout.html' %}
+{% block title %}
+    <title>Login</title>
+{% endblock %}
+{% block content %}
+    <div class="signup">
+        <h3>Giriş</h3>
+        <form class="signup_form" action="{% url 'account:login' %}" method="POST">
+            {% csrf_token %}
+            <div class="form-group row">
+                {{form}}
+                {% if request.GET.next %}
+                    <input type="hidden" name='next' value='{{request.GET.next}}'>
+                {% endif %}
+                <input class='form-control btn btn-secondary  btn-block mt-3' type='submit' value="Login" >
+            </div>
+        </form>
+    </div>
+ 
+
+{% endblock %}

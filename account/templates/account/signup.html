@@ -1,0 +1,32 @@
+{% extends 'base_layout.html' %}
+{% block title %}
+    <title>Singup</title>
+{% endblock %}
+{% block content %}
+    <div class="signp">
+        <form class="signu" action='/account/signup' method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                {{form}}
+                <div class="form-group">
+                    <label for="firstNameID">Adınız:</label>
+                    <input type="text" class="form-control" id="firstNameID" placeholder="Adınız..." name='firstName' required >
+                </div>
+                <div class="form-group">
+                    <label for="lastNameID">Adınız:</label>
+                    <input type="text" class="form-control" id="lastNameID" placeholder="Soyadınız..." name='lastName' required>
+                </div>
+                <input class='form-control btn btn-secondary  btn-block mt-3' type='submit' value="Kaydet" >
+            </div>
+
+        </form>
+    </div>
+    <script>
+        const spans = document.getElementsByTagName('span');
+        for(let i=0; i<spans.length ; i++)
+            spans.item(i).className = "form-text text-muted mt-0"
+      
+            
+    </script>
+
+{% endblock %}

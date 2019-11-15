@@ -1,0 +1,64 @@
+{% extends 'base_layout.html' %}
+{% block title %}
+    <title>Mail Detay</title>
+{% endblock %}
+{% block content %}
+
+    <div class='mailDetail container'>
+        <div class="row">
+            <div class="row col-12">
+                <div class="col-9">
+                    <h4 class="col-12 text-truncate info__name">{{mail.from_name}}</h4>
+                    <p class="col-12 text-truncate info__email">--{{mail.from_email}}--</p> 
+                </div>
+                <p class="col-3 align-self-end info__date text-right">{{mail.date}}</p>
+            </div>
+            <div class="col-12 row mt-2 mb-1">
+                <h3 class="col-7">{{mail.subject}}</h3>
+                <button  class="col-2 btn btn-outline-primary btn-sm mr-2" onclick={reply()}>CEVAPLA</button>
+                <button  class="col-2 btn btn-outline-danger mr-2" onclick={reply()}>SİL</button>
+            </div>
+            <iframe class="col-12 border-0 mailDetail__frame container-fluid" 
+                srcdoc='{{mail.body_html}}'></iframe>
+            <div class="reply_message bg-light mr-3 w-75" id='reply_id'>
+                <div class="row justify-content-end m-3 ">
+                    <i class="fas fa-minus mr-3" onclick='min_reply(this)' id='icon_id'></i>
+                    <i class="fas fa-times" onclick='close_reply(this)'></i>
+                   
+                </div>
+                
+                <form class='row justify-content-center mb-2' action="/mails/reply-mail/{{mail.uid}}" method='POST'>
+                    {% csrf_token %}
+                    <div class="col-12">
+                        <textarea name='reply' cols='80' rows="13" id='textarea_id'></textarea>
+                    </div>
+                    <input type='submit' class='btn btn-secondary btn-lg btn-block col-11 mt-2' value='REPLY' id='submit_id'>
+                </form>
+            </div>
+        </div>
+    </div>
+        
+        
+     
+   <script>
+        var bo = true;
+        const replyMessage = document.getElementById('reply_id');
+        const textarea = document.getElementById('textarea_id');
+        const submit = document.getElementById('submit_id');
+        const icon = document.getElementById('icon_id');
+        const reply = ()=>{
+            replyMessage.style.display = 'block';
+        }
+        const close_reply = ()=>{
+            replyMessage.style.display ='none';
+        }
+ 
+        const min_reply = ()=>{ 
+            bo =! bo;
+            textarea.style.display = bo ? 'block' : 'none';
+            submit.style.display = bo ? 'block' : 'none';
+            icon.className = bo ? 'fas fa-minus mr-3' : 'far fa-window-maximize mr-3';
+        }
+
+   </script>
+{% endblock %}

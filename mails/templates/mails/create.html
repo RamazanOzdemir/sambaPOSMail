@@ -1,0 +1,70 @@
+{% extends 'base_layout.html' %}
+{% load static from staticfiles %}
+{% block title %}
+    <title>Mail Detay</title>
+{% endblock %}
+{% block content %}
+
+      <div class='container mt-2'>
+          <nav>
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+              <a class="nav-item nav-link active" id="nav-text-tab" data-toggle="tab" href="#nav-text" role="tab" aria-controls="nav-text" aria-selected="true">Normal</a>
+              <a class="nav-item nav-link" id="nav-html-tab" data-toggle="tab" href="#nav-html" role="tab" aria-controls="nav-html" aria-selected="false">Html Tema</a>
+              <a class="nav-item nav-link" id="nav-load-tab" data-toggle="tab" href="#nav-load" role="tab" aria-controls="nav-load" aria-selected="false">Tema Yükle</a>
+            </div>
+          </nav>
+          <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="nav-text" role="tabpanel" aria-labelledby="nav-text-tab">
+                <form class="create__form" action="{% url 'mails:create' %}" method="POST">
+                  {% csrf_token %}
+                  <div class="form-group row">
+                    {{form}}
+                    <input class='btn btn-secondary btn-lg btn-block' type="submit" value='GÖNDER' >
+                  </div>
+                  
+                </form>
+            </div>
+            <div class="tab-pane fade" id="nav-html" role="tabpanel" aria-labelledby="nav-html-tab">
+                <form class="create__form" action="{% url 'mails:create' %}" method="POST">
+                  {% csrf_token %}
+                  <div class="form-group row">
+                      {{formTemplate}}
+                      <div class="col-12 border rounded-lg border-warning ">
+                        <div class="tempalte__message form-group row m-2">
+                            <input class='form-control col-6' type="text" name='to'><br>
+                            <textarea class='form-control col-12' name='body'></textarea><br>
+                            <div class="col-4 ml-auto mt-4 mb-0">
+                                <input class='form-control col-12' type='text' name='name' >
+                                <input class='form-control col-12 ' type='text' name='dept' >
+                            </div>
+
+                        </div>
+                      </div>
+
+                     <input class='btn btn-secondary btn-lg btn-block' type="submit" value='GÖNDER' >
+                  </div>
+                  
+                </form>
+            </div>
+            <div class="tab-pane fade" id="nav-load" role="tabpanel" aria-labelledby="nav-load-tab">
+                <h3>TAB 3</h3>
+                <form class="create__form" action="{% url 'mails:create' %}" method="POST">
+                  {% csrf_token %}
+                  <div class="form-group row">
+                      {{formTemplate}}
+                      <input class='btn btn-secondary btn-lg btn-block' type="submit" value='GÖNDER' >
+                  </div>
+
+                </form>
+            </div>
+          </div>
+      </div>
+      <script>
+          const labels = document.getElementsByTagName('label');
+          for (let i = 0 ; i<labels.length ; i++)
+            labels.item(i).className = 'col-2 col-form-label';
+      </script>
+        
+     
+   
+{% endblock %}

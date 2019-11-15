@@ -1,0 +1,112 @@
+*{
+    box-sizing: border-box;
+}
+
+body{
+    margin: 0;
+    padding: 0;
+   
+}
+
+
+
+
+.wrapper{
+    width: 100%;
+   
+    display: flex;
+}
+.signup{
+    margin: 20px auto;
+    padding: 0px auto;
+    width: 40em;
+    
+}
+
+
+.sideBar{
+    
+    width: 20vw;
+    height: 90vh;
+    left: 0;
+    border:1px solid #555;
+}
+.main{
+    position: relative;
+   
+    border:1px solid purple;
+    width: 100%;
+    height: 90vh;
+    overflow: auto;
+    
+}
+.inbox{
+    width: 100%;
+}
+
+.inbox__list{
+    display: flex   ;
+    grid-column: aa aa aa aa aa aa aa aa;
+    justify-content:space-between;
+    align-items: center;
+    margin: 0 30px;
+    border : 1px solid red;
+    padding: 0 20px;    
+    text-decoration: none;
+    color: #000;
+}
+
+.mailDetail{
+    width: 100%;
+    height: 100%;
+    padding: 10px 30px;
+}
+.mailDetail_info{
+    width: 100%;
+    padding: 2px 40px;
+    display: grid;
+    border:1px solid seagreen;
+    position: relative;
+}
+
+.mailDetail__frame{
+    width: 100%;
+    height: 70vh;
+   
+}
+
+
+
+
+
+
+
+
+
+.create__form input,label,textarea{
+    display: block;
+    margin: 5px 0px;
+    width: 100%;
+}
+label[for='id_body_html']{
+    display: none;
+}
+.tempalte__message{
+    height: 80vh;
+    background-color: #fff;
+    background-image: url('./sambaPOS.png');
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.tempalte__message textarea{
+    background-color: transparent;
+}
+.reply_message{
+    border: 1px solid rebeccapurple;
+    position: fixed;
+    display: none;
+    bottom: 10px;
+    right: 20px;
+    border: 3px solid red;
+}
+
