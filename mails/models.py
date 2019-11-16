@@ -2,11 +2,20 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Person (models.Model):
+    COLOR_CHOICES = [
+        ('#e53935', 'Kırmızı'),
+        ('#1976d2', 'Mavi'),
+        ('#00796b', 'Yeşil'),
+        ('#ffeb3b', 'Sarı'),
+        ('#f4511e', 'Turuncu'),
+        ('#546e7a', 'Gri'),
+        ('#5e35b1', 'Mor'),
+    ]
     person = models.ForeignKey(User,on_delete=models.CASCADE)
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
     full_name = models.CharField(max_length=50,default='')
-    personColor = models.CharField(max_length=50,default='')
+    personColor = models.CharField(max_length=15,choices=COLOR_CHOICES,default='#1976d2',)
     
     def __str__(self):
         self.full_name=("{} {}".format(self.first_name, self.last_name))
@@ -21,7 +30,7 @@ class IncomingEmail(models.Model):
     to_email = models.EmailField(max_length=100)
     body_plain = models.TextField()
     body_html = models.TextField()
-    date = models.DateTimeField(auto_now=True)
+    date = models.DateTimeField(auto_now=False)
     reply_persons = models.ManyToManyField('Person', related_name='incomingemails')
     def __str__(self):
         return self.subject

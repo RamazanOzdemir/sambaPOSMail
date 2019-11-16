@@ -6,30 +6,36 @@
     <div class="container-fluid mt-0" >
         <div class="container border-bottom border-info mb-2">
             <div class="row align-items-center mt-1 mb-1">
-                <input class='col-1 ' name='message-checkbox' type="checkbox" onclick="toggle(this)">
-                 <a href='a'><i class="fas fa-trash-alt "></i></a>
+                <input class='col-1 ' name='message_checkbox_inbox' type="checkbox" onclick="toggle(this)">
+                <button class="btn bg-translate " id='delete_button' name='inbox' type='submit' form='nav-all-tab_form'><i class="fas fa-trash-alt "></i></button>
 
             </div>
         </div>
         <nav>
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
-              <a class="nav-item nav-link active text-info" id="nav-all-tab" data-toggle="tab" href="#nav-all" role="tab" aria-controls="nav-all" aria-selected="true">Gelen Mesajlar</a>
-              <a class="nav-item nav-link text-warning" id="nav-unread-tab" data-toggle="tab" href="#nav-unread" role="tab" aria-controls="nav-unread" aria-selected="false">Okunmamış Mesajlarlar</a>
-              <a class="nav-item nav-link text-danger" id="nav-wait-tab" data-toggle="tab" href="#nav-wait" role="tab" aria-controls="nav-wait" aria-selected="false">Beklediklerim</a>
+              <a class="nav-item nav-link active text-info" id="nav-all-tab" data-toggle="tab" href="#nav-all" role="tab" aria-controls="nav-all" aria-selected="true" onclick="selectForm(this)" >Gelen Mesajlar</a>
+              <a class="nav-item nav-link text-warning" id="nav-unread-tab" data-toggle="tab" href="#nav-unread" role="tab" aria-controls="nav-unread" aria-selected="false" onclick="selectForm(this)" >Cevapladığım Mesajlarlar</a>
+              <a class="nav-item nav-link text-danger" id="nav-wait-tab" data-toggle="tab" href="#nav-wait" role="tab" aria-controls="nav-wait" aria-selected="false" onclick="selectForm(this)" >Cevap Bekleyen Mesajlar</a>
             </div>
         </nav>
         <div class="tab-content" id="nav-tabContent">
             <div class="tab-pane fade show active" id="nav-all" role="tabpanel" aria-labelledby="nav-all-tab">
-                <form>
-                    {% for mail in inbox_mails %}
+                <form action="{% url 'mails:delete' %}" method="POST" name='in' id='nav-all-tab_form'>
+                    {% csrf_token %}
+                    {% for mail in all_incoming %}
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">
-                            <a  class='row' 
-                            href="/mails/detail-mail/{{mail.uid}}/")>
-                                <input class='col-1 list__checkbox' name='message-checkbox' type="checkbox">
-                                <p class="col-2 list__name">{{ mail.from_name}}</p>
-                                <p class="col-6 list__subject">{{ mail.subject}}</p>
-                                <p class="col lis__date">{{ mail.date}}</p>
+                            <a  class='row text-info' 
+                            href="/mails/detail-mail/{{mail.0.uid}}/")>
+                                <input class='col-1 list__checkbox' name='message_checkbox_inbox' value="{{mail.0.uid}}" type="checkbox">
+                                <p class="col-2 list__name text-truncate">{{ mail.0.from_name}}</p>
+                                <p class="col-5 list__subject text-truncate text-truncate ">{{ mail.0.subject}}</p>
+                                <div class="col-3 d-flex" >
+                                    {% for person in mail.1 %}
+                                        <span>{{person.full_name}}</span>
+                                    {% endfor%}
+                                </div>
+                                <p class="col-1 lis__date">{{ mail.0.date}}</p>
                             </a>
                         </li>
                     </ul>    
@@ -37,7 +43,28 @@
                 </form>
             </div>
             <div class="tab-pane fade" id="nav-unread" role="tabpanel" aria-labelledby="nav-unread-tab">
+                <form action="{% url 'mails:delete' %}" method="POST" name='in'  id='nav-unread-tab_form'>
+                    {% csrf_token %}
+                    {% for mail in my_incoming %}
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <a  class='row text-warning' 
+                            href="/mails/detail-mail/{{mail.0.uid}}/")>
+                                <input class='col-1 list__checkbox' name='message_checkbox_inbox' value="{{mail.0.uid}}" type="checkbox">
+                                <p class="col-2 list__name text-truncate ">{{ mail.0.from_name}}</p>
+                                <p class="col-5 list__subject text-truncate ">{{ mail.0.subject}}</p>
+                                <div class="col-3 d-flex" >
 
+                                    {% for person in mail.1 %}
+                                        <span>{{person.full_name}}</span>
+                                    {% endfor%}
+                                </div>
+                                <p class="col-1 lis__date">{{ mail.0.date}}</p>
+                            </a>
+                        </li>
+                    </ul>    
+                    {% endfor %}
+                </form>
             </div>
             <div class="tab-pane fade" id="nav-wait" role="tabpanel" aria-labelledby="nav-wait-tab">
 
@@ -45,8 +72,14 @@
         </div>
     </div>
     <script>
+         
+        const selectForm = (e)=>{
+            const btn = document.getElementById('delete_button');
+            console.log(e.id)
+            btn.setAttribute('form',e.id+'_form');
+        };
         const toggle = (e)=>{
-            checkboxes = document.getElementsByName('message-checkbox');
+            checkboxes = document.getElementsByName('message_checkbox_inbox');
             for(let i = 0 ; i<checkboxes.length ; i++)
                 checkboxes[i].checked = e.checked;
            

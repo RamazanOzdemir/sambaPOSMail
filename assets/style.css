@@ -1,0 +1,71 @@
+*{
+    box-sizing: border-box;
+}
+
+body{
+    margin: 0;
+    padding: 0;
+   
+}
+
+
+
+
+.wrapper{
+    width: 100%;
+   
+    display: flex;
+}
+.signup{
+    margin: 20px auto;
+    padding: 0px auto;
+    width: 40em;
+    
+}
+
+
+.sideBar{
+    
+    width: 20vw;
+    height: 90vh;
+    left: 0;
+    border:1px solid #555;
+}
+.main{
+    
+   
+   
+    
+    height: 90vh;
+    overflow: auto;
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+.tempalte__message{
+    height: 80vh;
+    background-color: #fff;
+    background-image: url('./sambaPOS.png');
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.tempalte__message textarea{
+    background-color: transparent;
+}
+.reply_message{
+    border: 1px solid #555;
+    position: fixed;
+    display: none;
+    bottom: 10px;
+    right: 20px;
+}
+
