@@ -7,7 +7,13 @@
         <div class="container border-bottom border-info mb-2">
             <div class="row align-items-center mt-1 mb-1">
                 <input class='col-1 ' name='message_checkbox_inbox' type="checkbox" onclick="toggle(this)">
-                <button class="btn bg-translate " id='delete_button' name='inbox' type='submit' form='nav-all-tab_form'><i class="fas fa-trash-alt "></i></button>
+                <button type="button" class="btn bg-translate" data-toggle="modal" data-target="#exampleModalScrollable">
+                    <i class="fas fa-trash-alt "></i>
+                </button>
+                <button type="button" class="btn bg-translate" data-toggle="modal" data-target="#personList">
+                    list
+                </button>
+                <button class="btn bg-translate " id='delete_btton' name='forward' type='submit' form='nav-all-tab_form'><i class="fas fa-trash-alt "></i></button>
 
             </div>
         </div>
@@ -20,54 +26,109 @@
         </nav>
         <div class="tab-content" id="nav-tabContent">
             <div class="tab-pane fade show active" id="nav-all" role="tabpanel" aria-labelledby="nav-all-tab">
-                <form action="{% url 'mails:delete' %}" method="POST" name='in' id='nav-all-tab_form'>
+                <form action="{% url 'mails:delete' %}" method="POST"  id='nav-all-tab_form'>
                     {% csrf_token %}
-                    {% for mail in all_incoming %}
                     <ul class="list-group list-group-flush">
+                    {% for mail in all_incoming %}
+                    
                         <li class="list-group-item">
                             <a  class='row text-info' 
                             href="/mails/detail-mail/{{mail.0.uid}}/")>
-                                <input class='col-1 list__checkbox' name='message_checkbox_inbox' value="{{mail.0.uid}}" type="checkbox">
+                                <input class='col-1 list__checkbox mt-2' name='message_checkbox_inbox' value="{{mail.0.uid}}" type="checkbox">
                                 <p class="col-2 list__name text-truncate">{{ mail.0.from_name}}</p>
-                                <p class="col-5 list__subject text-truncate text-truncate ">{{ mail.0.subject}}</p>
+                                <p class="col-4 list__subject text-truncate text-truncate ">{{ mail.0.subject}}</p>
                                 <div class="col-3 d-flex" >
                                     {% for person in mail.1 %}
-                                        <span>{{person.full_name}}</span>
+                                        <p class='rounded-circle text-white p-2' style='background:{{person.personColor}};'>
+                                            {{person.avatar}}
+                                        </p>
                                     {% endfor%}
                                 </div>
-                                <p class="col-1 lis__date">{{ mail.0.date}}</p>
+                                <p class="col-2 lis__date">{{ mail.0.date}}</p>
                             </a>
                         </li>
-                    </ul>    
                     {% endfor %}
+                    </ul>    
+                    
                 </form>
             </div>
             <div class="tab-pane fade" id="nav-unread" role="tabpanel" aria-labelledby="nav-unread-tab">
-                <form action="{% url 'mails:delete' %}" method="POST" name='in'  id='nav-unread-tab_form'>
+                <form action="{% url 'mails:delete' %}" method="POST" id='nav-unread-tab_form'>
                     {% csrf_token %}
-                    {% for mail in my_incoming %}
                     <ul class="list-group list-group-flush">
+                    {% for mail in my_incoming %}
                         <li class="list-group-item">
                             <a  class='row text-warning' 
                             href="/mails/detail-mail/{{mail.0.uid}}/")>
-                                <input class='col-1 list__checkbox' name='message_checkbox_inbox' value="{{mail.0.uid}}" type="checkbox">
+                                <input class='col-1 list__checkbox mt-2' name='message_checkbox_inbox' value="{{mail.0.uid}}" type="checkbox">
                                 <p class="col-2 list__name text-truncate ">{{ mail.0.from_name}}</p>
-                                <p class="col-5 list__subject text-truncate ">{{ mail.0.subject}}</p>
+                                <p class="col-4 list__subject text-truncate ">{{ mail.0.subject}}</p>
                                 <div class="col-3 d-flex" >
 
                                     {% for person in mail.1 %}
-                                        <span>{{person.full_name}}</span>
+                                    <p class='rounded-circle text-white p-2' style='background:{{person.personColor}};'>
+                                        {{person.avatar}}
+                                    </p>
                                     {% endfor%}
                                 </div>
-                                <p class="col-1 lis__date">{{ mail.0.date}}</p>
+                                <p class="col-2 lis__date">{{ mail.0.date}}</p>
                             </a>
                         </li>
-                    </ul>    
                     {% endfor %}
+                    </ul>    
+                    
                 </form>
             </div>
             <div class="tab-pane fade" id="nav-wait" role="tabpanel" aria-labelledby="nav-wait-tab">
 
+            </div>
+        </div>
+        <div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  Seçili mailler silinsin  mi?
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-outline-danger " id='delete_button' name='inbox' type='submit' form='nav-all-tab_form'>SİL</i></button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+                </div>
+              </div>
+            </div>
+        </div>
+        <div class="modal fade" id="personList" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5>Yönlendirilecek Kişileri Seçin</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                    <form class="form-group" method='POST'></form>
+                    {% csrf_token %}
+                        <ul class="list-group list-group-flush">
+                            {% for person in all_persons %}
+                            <li class="list-group-item d-flex ">
+                                <input type="checkbox" class='mt-2' aria-label="checkbox button for following text input">
+                                <p class="text-dark ml-2" >{{person.full_name}}</p>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-outline-danger " id='delete_button' name='inbox' type='submit' form='nav-all-tab_form'>SİL</i></button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+                </div>
+              </div>
             </div>
         </div>
     </div>

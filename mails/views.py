@@ -8,8 +8,8 @@ from django.core.mail import send_mail,EmailMessage,get_connection
 import uuid
 def inbox(request):
     user = request.user
-    person = Person.objects.get(person=user)
-
+    all_persons = Person.objects.all()
+    person = all_persons.get(person=user)
     imbox = Imbox('imap.gmail.com',
       username = 'dene6606@gmail.com',
       password = 'Kartal1903',
@@ -63,7 +63,7 @@ def inbox(request):
             my_incoming.append([mail,reply_persons])
 
 
-    return render(request,'mails/inbox.html',{'inbox_mails':inbox_mails,'all_incoming':all_incoming,'my_incoming':my_incoming })
+    return render(request,'mails/inbox.html',{'inbox_mails':inbox_mails,'all_incoming':all_incoming,'my_incoming':my_incoming,'all_persons':all_persons })
 def create(request,**args):
     
     user = request.user
@@ -152,12 +152,15 @@ def delete(request):
     if request.method == 'POST':
         check_list_inbox = request.POST.getlist('message_checkbox_inbox')
         check_list_outbox = request.POST.getlist('message_checkbox_outbox')
-        print(check_list_outbox)
-        for uid in check_list_inbox: 
-            print (IncomingEmail.objects.filter(uid = uid).delete())
-        for uid in check_list_outbox: 
-            print (OutgoingEmail.objects.filter(uid = uid).delete())
-        if 'inbox' in request.POST:
-            return redirect('mails:inbox')
-        print(check_list_inbox)
-    return redirect('mails:outbox')
+        if 'forward' in request.POST:
+            for uid in check_list_inbox: 
+                IncomingEmail.objects.filter(uid = uid).delete()
+        else:
+            for uid in check_list_inbox: 
+                IncomingEmail.objects.filter(uid = uid).delete()
+            for uid in check_list_outbox: 
+                OutgoingEmail.objects.filter(uid = uid).delete()
+            if 'outbox' in request.POST:
+                return redirect('mails:outbox')
+            print(check_list_inbox)
+    return redirect('mails:inbox')
