@@ -7,8 +7,9 @@ urlpatterns = [
     path('outbox/',views.outbox, name='outbox' ),
     path('create/',views.create, name='create' ),
     path('delete/',views.delete, name='delete' ),
+    path('forward/',views.forward, name='forward' ),
     #path('send-mail',views.sendMail, name='sendMail' ),
-    re_path(r"detail-mail/(?P<uid>[\w '-]+)",views.detail, name='detailMail' ),
-    re_path(r"create/(?P<uid>[\w']+)",views.create, name='create' ),
+    re_path(r"detail-mail/(?P<uid>[\w '-]+)/(?P<reply>[\w']+)/$",views.detail, name='detailMail' ),
+    re_path(r"create/(?P<uid>[\w']+)/(?P<reply>[\w']+)/$",views.create, name='create' ),
     
 ]

@@ -10,6 +10,7 @@ def inbox(request):
     user = request.user
     all_persons = Person.objects.all()
     person = all_persons.get(person=user)
+    wait_to_reply = person.wait_to_reply.order_by('-date').all()
     imbox = Imbox('imap.gmail.com',
       username = 'dene6606@gmail.com',
       password = 'Kartal1903',
@@ -63,32 +64,37 @@ def inbox(request):
             my_incoming.append([mail,reply_persons])
 
 
-    return render(request,'mails/inbox.html',{'inbox_mails':inbox_mails,'all_incoming':all_incoming,'my_incoming':my_incoming,'all_persons':all_persons })
+    return render(request,'mails/inbox.html',
+    {'inbox_mails':inbox_mails,'all_incoming':all_incoming,'my_incoming':my_incoming,
+    'all_persons':all_persons,'wait_to_reply':wait_to_reply,'is_super_person':person.is_Super_Person })
 def create(request,**args):
     
     user = request.user
     person = Person.objects.get(person=user)
     
-           
-    
     if request.method == 'POST':
         form = forms.CreateEmail(request.POST,request.FILES)
         if form.is_valid:
-            
+            print(form)
             #save form
             if len(args)>0:
+                reply = args['reply']
                 uid = args['uid']
                 incoming_mail = IncomingEmail.objects.get(uid=uid)
                 incoming_mail.reply_persons.add(person)
                 subject = 'Re: {}'.format(incoming_mail.subject)
-                to_email = incoming_mail.from_email
+                emails = incoming_mail.from_email
+                to_emails = [emails]
                 to_name = incoming_mail.from_name
                 #html_content = "<div dir='ltr'>{}<div dir='rtl'>{}</div></div>".format(form.data['reply'],incoming_mail.body_html)
                 html_content = "<div dir='ltr'>{}</div>".format(form.data['reply'])
                 body_plain = form.data['reply']
+                if reply == 'reply':
+                    person.wait_to_reply.remove(incoming_mail)
             else:
                 subject = form.data['subject']
-                to_email = form.data['to_email']
+                emails = form.data['to_email']
+                to_emails = emails.split(';')
                 to_name = ''
                 if 'to' in  form.data:
                     
@@ -99,7 +105,7 @@ def create(request,**args):
                     body_plain = form.data['body_html']
             connection = get_connection(backend=None,fail_silently=False, username='dene6606@gmail.com', password='Kartal1903')
             email = EmailMessage(subject, html_content, 'dene6606@gmail.com',
-            [to_email,],connection=connection, headers = {'Reply-To': 'dene6606@gmail.com'})
+            to_emails,connection=connection, headers = {'Reply-To': 'dene6606@gmail.com'})
             email.content_subtype = "html"
             #email.attach_file('./assets/sambaPOS.png')
             email.send()
@@ -107,7 +113,7 @@ def create(request,**args):
                 uid = str(uuid.uuid4()),
                 subject = subject,
                 to_name = to_name,
-                to_email = to_email,
+                to_email = emails,
                 body_plain = body_plain,
                 body_html = html_content,
             )
@@ -124,14 +130,14 @@ def create(request,**args):
 
 
 
-def detail(request,uid):
+def detail(request,uid,reply):
     mail =  IncomingEmail.objects.filter(uid=uid)
     incoming = True
     if len(mail) == 0:
         mail =  OutgoingEmail.objects.filter(uid=uid)
         incoming = False
     
-    return render(request,'mails/detail.html',{'mail':mail[0],'incoming':incoming })
+    return render(request,'mails/detail.html',{'mail':mail[0],'incoming':incoming ,'reply':reply})
 
 def outbox(request):
     user = request.user
@@ -164,3 +170,20 @@ def delete(request):
                 return redirect('mails:outbox')
             print(check_list_inbox)
     return redirect('mails:inbox')
+
+def forward(request):
+    if request.method == 'POST':
+        check_list_person = request.POST.getlist('person_checkbox')
+        check_list_message = request.POST.getlist('message_checkbox')
+        persons = Person.objects.all()
+        messages = IncomingEmail.objects.all()
+        for person_uid in check_list_person:
+            person = persons.get(uid=person_uid)
+            for message_uid in check_list_message:
+                person.wait_to_reply.add(messages.get(uid=message_uid))
+            
+        print('********************************')
+        print(check_list_person)
+        print(check_list_message)
+        print('***********************************')
+        return redirect('mails:inbox')

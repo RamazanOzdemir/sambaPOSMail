@@ -12,9 +12,9 @@
         </div>
         <nav>
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
-              <a class="nav-item nav-link active text-info" id="nav-out_all-tab" data-toggle="tab" href="#nav-out_all" role="tab" aria-controls="nav-out_all" aria-selected="true" onclick="selectForm(this)">
+              <a class="nav-item nav-link active text-info tab__header" id="nav-out_all-tab" data-toggle="tab" href="#nav-out_all" role="tab" aria-controls="nav-out_all" aria-selected="true" onclick="selectForm(this)">
                 Gönderilen Mesajlar</a>
-              <a class="nav-item nav-link text-warning" id="nav-my_out-tab" data-toggle="tab" href="#nav-my_out" role="tab" aria-controls="nav-my_out" aria-selected="false" onclick="selectForm(this)">
+              <a class="nav-item nav-link text-warning tab__header" id="nav-my_out-tab" data-toggle="tab" href="#nav-my_out" role="tab" aria-controls="nav-my_out" aria-selected="false" onclick="selectForm(this)">
                 Benim Gönderdiğim Mesajlarlar</a>
             </div>
         </nav>
@@ -24,18 +24,23 @@
                     {% csrf_token %}
                     {% for mail in outgoing_mails %}
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item">
-                            <a  class='row text-info' 
-                            href="/mails/detail-mail/{{mail.0.uid}}/")>
-                                <input class='col-1 list__checkbox' name='message_checkbox_outbox' value="{{mail.0.uid}}" type="checkbox">
-                                <p class="col-2 list__name text-truncate">{{ mail.0.to_email}}</p>
-                                <p class="col-5 list__subject text-truncate text-truncate ">{{ mail.0.subject}}</p>
-                                <div class="col-3 d-flex" >
+                        <li class="list-group-item p-0 ">
+                            <a  class='row text-info  p-2' 
+                            href="/mails/detail-mail/{{mail.0.uid}}/notReply/")>
+                                <input class='col-1 list__checkbox m-auto' name='message_checkbox_outbox' value="{{mail.0.uid}}" type="checkbox">
+                                <p class="col-2 list__name text-truncate ">{{ mail.0.to_email}}</p>
+                                <p class="col-4 list__subject text-truncate text-truncate ">{{ mail.0.subject}}</p>
+                                <div class="col-3 d-flex m-0" >
                                     {% for person in mail.1 %}
-                                        <span>{{person.full_name}}</span>
+                                        <p class='rounded-circle text-white avatar_list ' 
+                                        style='background:{{person.personColor}};'
+                                        data-toggle="tooltip" title="{{person.full_name}}"
+                                        >
+                                            {{person.avatar}}
+                                        </p>
                                     {% endfor%}
                                 </div>
-                                <p class="col-1 lis__date">{{ mail.0.date}}</p>
+                                <p class="col-2 list__date">{{ mail.0.date}}</p>
                             </a>
                         </li>
                     </ul>    
@@ -47,19 +52,24 @@
                     {% csrf_token %}
                     {% for mail in my_outgoing_mails %}
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item">
-                            <a  class='row text-warning' 
-                            href="/mails/detail-mail/{{mail.0.uid}}/")>
-                                <input class='col-1 list__checkbox' name='message_checkbox_outbox' value="{{mail.0.uid}}" type="checkbox">
+                        <li class="list-group-item p-0">
+                            <a  class='row text-warning p-2 ' 
+                            href="/mails/detail-mail/{{mail.0.uid}}/notReply/")>
+                                <input class='col-1 list__checkbox m-auto' name='message_checkbox_outbox' value="{{mail.0.uid}}" type="checkbox">
                                 <p class="col-2 list__name text-truncate ">{{ mail.0.to_email}}</p>
-                                <p class="col-5 list__subject text-truncate ">{{ mail.0.subject}}</p>
+                                <p class="col-4 list__subject text-truncate ">{{ mail.0.subject}}</p>
                                 <div class="col-3 d-flex" >
                                        
                                     {% for person in mail.1 %}
-                                        <span>{{person.full_name}}</span>
+                                        <p class='rounded-circle text-white avatar_list ' 
+                                        style='background:{{person.personColor}};'
+                                        data-toggle="tooltip" title="{{person.full_name}}"
+                                        >
+                                            {{person.avatar}}
+                                        </p>
                                     {% endfor%}
                                 </div>
-                                <p class="col-1 lis__date">{{ mail.0.date}}</p>
+                                <p class="col-2 list__date">{{ mail.0.date}}</p>
                             </a>
                         </li>
                     </ul>    

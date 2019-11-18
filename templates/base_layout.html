@@ -11,25 +11,26 @@
     {% endblock %}
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-    <link rel='stylesheet' href="{% static 'style.css' %}">
+    <link rel='stylesheet' href="{% static 'styl.css' %}">
 </head>
 <body>
     <nav class="navbar navbar-expand-sm ">         
-        <a href='/#' class="navbar-brand col-2 text-dark">SambaPOS-MAIL</a>
+        <a href='/#' class="navbar-brand col-2 text-dark"><img  height="30px" width="auto" src="{% static 'sambalogo.png' %}" alt=''></a>
         {% if user.is_authenticated %}
         <input class="form-control mr-sm-2" type="search" placeholder="Ara...">
             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                 <li class="nav-item">
                     <form class="form-inline my-2 my-lg-0" action="{% url 'account:logout' %}" method="POST">
                         {% csrf_token%}
-                        <button type='submit' class="btn btn-outline-primary" >Logout</button>
+                        <button type='submit' class="btn btn-outline-info" >Logout</button>
+                        {{avatar.full_name}}
                     </form>
                 </li>
             </ul>
         {% else %}
             <ul class="navbar-nav ml-auto mt-2 mt-lg-0 ">
-                <li class="nav-item mr-2"><a class="nav-link btn btn-outline-primary" href="{% url 'account:login' %}" class="nav-link" >Login</a></li>
-                <li class="nav-item "><a class="nav-link btn btn-outline-primary" href="{% url 'account:signup' %}" class="nav-link" >Signup</a></li>
+                <li class="nav-item mr-2"><a class="nav-link btn btn-outline-info" href="{% url 'account:login' %}" class="nav-link" >Login</a></li>
+                <li class="nav-item "><a class="nav-link btn btn-outline-info" href="{% url 'account:signup' %}" class="nav-link" >Signup</a></li>
             </ul>
         {% endif %}
     </nav>
@@ -37,9 +38,9 @@
         {% if user.is_authenticated %}
         <div class="container col-2 border main">
             <nav class='nav flex-column mt-2' >
-                <a class="nav-link text-dark" href="{% url 'mails:inbox' %}" >Gelen Mesajlar</a><br>
-                <a class="nav-link text-dark" href="{% url 'mails:outbox' %}" >Gönderilen Mesajlar</a><br>
-                <a class="nav-link text-dark" href="{% url 'mails:create'%}">Yeni Mesaj Oluştur </a>
+                <a class="nav-link text-dark" href="{% url 'mails:inbox' %}" ><b>Gelen Mesajlar</b></a><br>
+                <a class="nav-link text-dark" href="{% url 'mails:outbox' %}" ><b>Gönderilen Mesajlar</b></a><br>
+                <a class="nav-link text-dark" href="{% url 'mails:create'%}"><b>Yeni Mesaj Oluştur </b></a>
             </nav>
         </div>
         {% endif %}

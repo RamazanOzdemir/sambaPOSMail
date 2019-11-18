@@ -7,14 +7,15 @@ class CreateEmail(forms.ModelForm):
         fields = ['subject','to_email','body_html']
     def __init__(self, *args, **kwargs):
         super(CreateEmail, self).__init__(*args, **kwargs)
+        self.fields['body_html'].label =""
         for field in iter(self.fields):
             if field == 'body_html':
                 self.fields[field].widget.attrs.update({
-                    'class': 'form-control col-12'
+                    'class': 'form-control col-12 mb-3'
             })
             else:
                 self.fields[field].widget.attrs.update({
-                    'class': 'form-control col-10'
+                    'class': 'form-control col-10 mb-3'
                 })
             
 
@@ -26,5 +27,5 @@ class CreateTenplateEmail(forms.ModelForm):
         super(CreateTenplateEmail, self).__init__(*args, **kwargs)
         for field in iter(self.fields):
             self.fields[field].widget.attrs.update({
-            'class': 'form-control col-10'
+            'class': 'form-control col-10 mb-3'
             })

@@ -8,13 +8,13 @@
       <div class='container mt-2'>
           <nav>
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
-              <a class="nav-item nav-link active" id="nav-text-tab" data-toggle="tab" href="#nav-text" role="tab" aria-controls="nav-text" aria-selected="true">Normal</a>
-              <a class="nav-item nav-link" id="nav-html-tab" data-toggle="tab" href="#nav-html" role="tab" aria-controls="nav-html" aria-selected="false">Html Tema</a>
-              <a class="nav-item nav-link" id="nav-load-tab" data-toggle="tab" href="#nav-load" role="tab" aria-controls="nav-load" aria-selected="false">Tema Yükle</a>
+              <a class="nav-item nav-link active text-primary tab__header " id="nav-text-tab" data-toggle="tab" href="#nav-text" role="tab" aria-controls="nav-text" aria-selected="true">Normal</a>
+              <a class="nav-item nav-link text-primary tab__header " id="nav-html-tab" data-toggle="tab" href="#nav-html" role="tab" aria-controls="nav-html" aria-selected="false">Html Tema</a>
+              <a class="nav-item nav-link text-primary tab__header " id="nav-load-tab" data-toggle="tab" href="#nav-load" role="tab" aria-controls="nav-load" aria-selected="false">Tema Yükle</a>
             </div>
           </nav>
           <div class="tab-content" id="nav-tabContent">
-            <div class="tab-pane fade show active" id="nav-text" role="tabpanel" aria-labelledby="nav-text-tab">
+            <div class="tab-pane fade show active mt-4" id="nav-text" role="tabpanel" aria-labelledby="nav-text-tab">
                 <form class="create__form" action="{% url 'mails:create' %}" method="POST">
                   {% csrf_token %}
                   <div class="form-group row">
@@ -24,8 +24,8 @@
                   
                 </form>
             </div>
-            <div class="tab-pane fade" id="nav-html" role="tabpanel" aria-labelledby="nav-html-tab">
-                <form class="create__form" action="{% url 'mails:create' %}" method="POST">
+            <div class="tab-pane fade mt-4" id="nav-html" role="tabpanel" aria-labelledby="nav-html-tab">
+                <form class="create__form " action="{% url 'mails:create' %}" method="POST">
                   {% csrf_token %}
                   <div class="form-group row">
                       {{formTemplate}}
@@ -46,7 +46,7 @@
                   
                 </form>
             </div>
-            <div class="tab-pane fade" id="nav-load" role="tabpanel" aria-labelledby="nav-load-tab">
+            <div class="tab-pane fade m-4" id="nav-load" role="tabpanel" aria-labelledby="nav-load-tab">
                 <h3>TAB 3</h3>
                 <form class="create__form" action="{% url 'mails:create' %}" method="POST">
                   {% csrf_token %}

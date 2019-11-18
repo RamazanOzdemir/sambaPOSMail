@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-
+import uuid
 class Person (models.Model):
     COLOR_CHOICES = [
         ('#e53935', 'Kırmızı'),
@@ -11,6 +11,7 @@ class Person (models.Model):
         ('#546e7a', 'Gri'),
         ('#5e35b1', 'Mor'),
     ]
+    uid = models.CharField(max_length=50,default=uuid.uuid4())
     person = models.ForeignKey(User,on_delete=models.CASCADE)
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
@@ -31,7 +32,7 @@ class IncomingEmail(models.Model):
     from_name = models.CharField(max_length=100)
     from_email = models.EmailField(max_length=100)
     to_name = models.CharField(max_length=100)
-    to_email = models.EmailField(max_length=100)
+    to_email = models.CharField(max_length=250)
     body_plain = models.TextField()
     body_html = models.TextField()
     date = models.DateTimeField(auto_now=False)
@@ -45,7 +46,7 @@ class OutgoingEmail(models.Model):
     from_name = models.CharField(max_length=100)
     from_email = models.EmailField(max_length=100)
     to_name = models.CharField(max_length=100)
-    to_email = models.EmailField(max_length=100)
+    to_email = models.CharField(max_length=250)
     body_plain = models.TextField()
     body_html = models.TextField()
     date = models.DateTimeField(auto_now=True)
