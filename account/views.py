@@ -14,9 +14,9 @@ def signup_view(request):
             # save() user dönüyor. onu login yapıyoruz
             user = form.save()
             #mailbox oluştur
+           
             
-            
-            person = Person(person=user,first_name=form.data['firstName'],last_name=form.data['lastName'])
+            person = Person(person=user,first_name=form.data['firstName'],last_name=form.data['lastName'],personColor=form.data['color'])
             person.save()
             #LOGIN
             login(request,user)

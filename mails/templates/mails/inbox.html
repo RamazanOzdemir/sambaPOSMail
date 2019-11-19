@@ -21,7 +21,7 @@
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
               <a class="nav-item nav-link active text-info tab__header" id="nav-all-tab" data-toggle="tab" href="#nav-all" role="tab" aria-controls="nav-all" aria-selected="true" onclick="selectForm(this)" >Gelen Mesajlar</a>
               <a class="nav-item nav-link text-warning tab__header" id="nav-unread-tab" data-toggle="tab" href="#nav-unread" role="tab" aria-controls="nav-unread" aria-selected="false" onclick="selectForm(this)" >Cevapladığım Mesajlarlar</a>
-              <a class="nav-item nav-link text-danger tab__header" id="nav-wait-tab" data-toggle="tab" href="#nav-wait" role="tab" aria-controls="nav-wait" aria-selected="false" onclick="selectForm(this)" >Cevap Bekleyen Mesajlar <span class="badge badge-danger ml-1">{{wait_to_reply.count}}</span></a>
+              <a class="nav-item nav-link text-danger tab__header" id="nav-wait-tab" data-toggle="tab" href="#nav-wait" role="tab" aria-controls="nav-wait" aria-selected="false" onclick="selectForm(this)" >Bana Yönlendirilen Mesajlar <span class="badge badge-danger ml-1">{{wait_to_reply.count}}</span></a>
             </div>
         </nav>
         <div class="tab-content" id="nav-tabContent">
@@ -32,7 +32,7 @@
                     {% for mail in all_incoming %}
                     
                         <li class="list-group-item p-0">
-                            <a  class='row text-info p-3'
+                            <a  class='row text-info p-2'
                             href="/mails/detail-mail/{{mail.0.uid}}/notReply")>
                                 <input class='col-1 list__checkbox m-auto' name='message_checkbox_inbox' value="{{mail.0.uid}}" type="checkbox">
                                 <p class="col-2 list__name text-truncate ">{{ mail.0.from_name}}</p>
@@ -62,7 +62,7 @@
                     <ul class="list-group list-group-flush">
                     {% for mail in my_incoming %}
                         <li class="list-group-item p-0">
-                            <a  class='row text-warning p-3' 
+                            <a  class='row text-warning p-2' 
                             href="/mails/detail-mail/{{mail.0.uid}}/notReply")>
                                 <input class='col-1 list__checkbox mt-auto' name='message_checkbox_inbox' value="{{mail.0.uid}}" type="checkbox">
                                 <p class="col-2 list__name text-truncate ">{{ mail.0.from_name}}</p>
@@ -89,7 +89,7 @@
                     <ul class="list-group list-group-flush">
                     {% for mail in wait_to_reply %}
                         <li class="list-group-item p-0">
-                            <a  class='row text-danger p-3' 
+                            <a  class='row text-danger p-2' 
                             href="/mails/detail-mail/{{mail.uid}}/reply")>
                                 <input class='col-1 list__checkbox mt-auto' name='message_checkbox_inbox' value="{{mail.uid}}" type="checkbox">
                                 <p class="col-2 list__name text-truncate ">{{ mail.from_name}}</p>

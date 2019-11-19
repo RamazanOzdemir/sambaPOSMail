@@ -57,13 +57,13 @@ body{
 }
 
 .list__name{
-    font-size: 14px;
+    font-size: 12px;
     font-weight: bold;
     line-height: 100%;
     margin: auto 0;
 }
 .list__subject , .list__date{
-    font-size: 14px;    
+    font-size: 12px;    
     line-height: 100%;
     margin: auto 0;
 }
@@ -76,5 +76,19 @@ body{
     margin: 0 5px;  
 }
 .tab__header{
-    font-size: 18px;
+    font-size: 14px;
+}
+.side_bar_menu{
+    font-size: 14px;
+}
+
+.info__email , .info__date{
+    font-size: 12px;
+}
+.detail__button{
+    height: 30px;
+}
+
+.detail__frame p , span , div {
+    font-size: 12px;
 }

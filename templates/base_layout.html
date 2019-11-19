@@ -38,9 +38,9 @@
         {% if user.is_authenticated %}
         <div class="container col-2 border main">
             <nav class='nav flex-column mt-2' >
-                <a class="nav-link text-dark" href="{% url 'mails:inbox' %}" ><b>Gelen Mesajlar</b></a><br>
-                <a class="nav-link text-dark" href="{% url 'mails:outbox' %}" ><b>Gönderilen Mesajlar</b></a><br>
-                <a class="nav-link text-dark" href="{% url 'mails:create'%}"><b>Yeni Mesaj Oluştur </b></a>
+                <a class="nav-link text-dark side_bar_menu" href="{% url 'mails:inbox' %}" ><b>Gelen Mesajlar</b></a><br>
+                <a class="nav-link text-dark side_bar_menu" href="{% url 'mails:outbox' %}" ><b>Gönderilen Mesajlar</b></a><br>
+                <a class="nav-link text-dark side_bar_menu" href="{% url 'mails:create'%}"><b>Yeni Mesaj Oluştur </b></a>
             </nav>
         </div>
         {% endif %}

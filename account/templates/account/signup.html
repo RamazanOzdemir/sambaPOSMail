@@ -18,12 +18,18 @@
                 </div>
                 <div class="form-group">
                     <label for="lastNameID">Kullanıcı renginizi seçiniz...</label>
-                    <select class="custom-select" id="inputGroupSelect04" aria-label="Example select with button addon">
-                      <option value="1">One</option>
-                      <option value="2">Two</option>
-                      <option value="3">Three</option>
+                    <select class="custom-select"  id="color_select" onchange="select_option()" name='color'>
+                      <option value= "#e53935" style="color:#e53935 ;"> Kırmızı </option>
+                      <option value= "#1976d2" style="color:#1976d2 ;"> Mavi </option>
+                      <option value= "#00796b" style="color:#00796b ;"> Yeşil </option>
+                      <option value= "#ffeb3b" style="color:#ffeb3b ;"> Sarı </option>
+                      <option value= "#f4511e" style="color:#f4511e ;"> Turuncu </option>
+                      <option value= "#546e7a" style="color:#546e7a ;"> Gri </option>
+                      <option value= "#5e35b1" style="color:#5e35b1;"> Mor</option>        
                     </select></div>
-            </div>
+                </div>
+                <input class='form-control btn btn-secondary  btn-block mt-3' type='submit' value="Signup" >
+
 
         </form>
     </div>
@@ -31,8 +37,12 @@
         const spans = document.getElementsByTagName('span');
         for(let i=0; i<spans.length ; i++)
             spans.item(i).className = "form-text text-muted mt-0"
-      
-            
+        const select_option = ()=>{
+          const select = document.getElementById('color_select');
+         select.style.color = select.options[select.selectedIndex].value;   
+        };
+        select_option();
+           
     </script>
 
 {% endblock %}

@@ -7,7 +7,7 @@ from . import forms
 from django.core.mail import send_mail,EmailMessage,get_connection
 import uuid
 def inbox(request):
-    user = request.user
+    user = request.user 
     all_persons = Person.objects.all()
     person = all_persons.get(person=user)
     wait_to_reply = person.wait_to_reply.order_by('-date').all()

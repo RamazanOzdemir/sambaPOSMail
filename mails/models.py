@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 import uuid
 class Person (models.Model):
+    objects = models.Manager()
     COLOR_CHOICES = [
         ('#e53935', 'Kırmızı'),
         ('#1976d2', 'Mavi'),
@@ -27,6 +28,7 @@ class Person (models.Model):
         return ("{} {}".format(self.first_name[0], self.last_name[0])).upper()
   
 class IncomingEmail(models.Model):
+    objects = models.Manager()
     uid = models.CharField(max_length=50)
     subject = models.CharField(max_length=250)
     from_name = models.CharField(max_length=100)
@@ -41,6 +43,7 @@ class IncomingEmail(models.Model):
         return self.subject
 
 class OutgoingEmail(models.Model):
+    objects = models.Manager()
     uid = models.CharField(max_length=50)
     subject = models.CharField(max_length=250)
     from_name = models.CharField(max_length=100)
