@@ -6,6 +6,9 @@ from django.template.loader import render_to_string
 from . import forms
 from django.core.mail import send_mail,EmailMessage,get_connection
 import uuid
+from django.contrib.auth.decorators import login_required
+
+@login_required(login_url='/account/login/')
 def inbox(request):
     user = request.user 
     all_persons = Person.objects.all()
@@ -67,6 +70,8 @@ def inbox(request):
     return render(request,'mails/inbox.html',
     {'inbox_mails':inbox_mails,'all_incoming':all_incoming,'my_incoming':my_incoming,
     'all_persons':all_persons,'wait_to_reply':wait_to_reply,'is_super_person':person.is_Super_Person })
+
+@login_required(login_url='/account/login/')
 def create(request,**args):
     
     user = request.user
@@ -129,7 +134,7 @@ def create(request,**args):
 
 
 
-
+@login_required(login_url='/account/login/')
 def detail(request,uid,reply):
     mail =  IncomingEmail.objects.filter(uid=uid)
     incoming = True
@@ -139,6 +144,7 @@ def detail(request,uid,reply):
     
     return render(request,'mails/detail.html',{'mail':mail[0],'incoming':incoming ,'reply':reply})
 
+@login_required(login_url='/account/login/')
 def outbox(request):
     user = request.user
     person = Person.objects.get(person=user)
