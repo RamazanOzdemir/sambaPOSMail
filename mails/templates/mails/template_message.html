@@ -5,33 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <style>
+        *{
+            box-sizing: border-box;
+        }
+        body{
+            margin: 2% 10%;
+        }
         .message{
             width: 100%;
             
-            border:1px solid rgb(241, 113, 53);
+            border:1px solid rgb(235, 199, 170);
             border-radius: 40px;
             background-color: #fff;
             background-image: url('https://raw.githubusercontent.com/RamazanOzdemir/sambapos/master/public/SambaPOS-Logo.png');
+            background-size: 300px 300px;
             background-repeat: no-repeat;
             background-position: center;
             
         }
         #to,#body{
             margin: 15% 5% 10% 5%;
-            border: 1px solid chartreuse;
+
         }
         #name,#dept{
-            margin: 20% 5% 3% 40%;
-            border: 1px solid chartreuse;
+            margin: 20% 5% 3% 70%;
         }
         #dept{
-            margin: 2% 5% 15% 40%;
+            margin: 2% 5% 15% 70%;
         }
         header,footer{
             height: 15vh;
             width: 100%;
             background: rgb(241, 113, 53);
             border-radius: 40px 40px 0 0;
+            position: relative;
         }
         footer{
             
@@ -40,10 +47,27 @@
             border-radius:0 0 40px 40px ;
             
         }
+        .logo{
+            position: absolute;
+            background-color: #fff;
+            border-radius: 20px;
+            width: 180px;
+            bottom: 20px;
+            left: 20px;
+
+        }
+        img{
+            height: 30px;
+            width: auto;
+            justify-self: center;
+            margin: 5px 20px;
+            
+            
+        }
         @media (min-width: 720px){
             #to,#body{margin: 8% 5% 10% 5%;}
-            #name,#dept{ margin: 8% 5% 1% 40%;}
-            #dept{margin: 1% 5% 15% 40%;}   
+            #name,#dept{ margin: 8% 5% 1% 65%;}
+            #dept{margin: 1% 5% 15% 65%;}   
             header,footer{height: 20vh;}      
         }
     </style>
@@ -51,28 +75,21 @@
 <body>
     <div class="message">
         <header>
+                <div class="logo">
+                      <a href='https://sambapos.com/'>
+                        <img src='https://raw.githubusercontent.com/RamazanOzdemir/sambaPOSMail/master/assets/sambalogo.png'>
+                      </a>  
+                    </div>
         </header>
-        <div class="re">
-            <p id='to'>{{to}}</p>
-            <pre id='body'>{{body}}ldsjlsd,
-                asd
-                asd
 
-                sd
-                ad
-                sddddddddddd
-                ddddddd
-                dddddddddd
-                ddddddddddd
-                dddddddddd
-                ddddddddddd
-                dee
-                effffffff
-                ffffffffffff
-                fffffffff
+
+        <div>
+
+            <p id='to'>{{to}}</p>
+            <pre id='body'>{{body}}
             </pre>
             <p id='name'>{{name}}</p>
-            <p id='dept'>{{dpt}}</p>  
+            <p id='dept'>{{dept}}</p>  
         </div>
 
         <footer></footer>

@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 import uuid
+from datetime import datetime
+
 class Person (models.Model):
     objects = models.Manager()
     COLOR_CHOICES = [
@@ -39,6 +41,10 @@ class IncomingEmail(models.Model):
     body_html = models.TextField()
     date = models.DateTimeField(auto_now=False)
     reply_persons = models.ManyToManyField('Person', related_name='incomingemails')
+
+    class Meta:
+        ordering = ['-date']
+
     def __str__(self):
         return self.subject
 
@@ -54,5 +60,16 @@ class OutgoingEmail(models.Model):
     body_html = models.TextField()
     date = models.DateTimeField(auto_now=True)
     reply_persons = models.ManyToManyField('Person', related_name='outgoingemails')
+
+    class Meta:
+        ordering = ['-date']
+
     def __str__(self):
         return self.subject
+
+class LastMessage(models.Model):
+    objects = models.Manager()
+    date = models.DateTimeField(default=datetime(1990,1,1 ))
+
+    def __str__(self):
+        return str(self.date)

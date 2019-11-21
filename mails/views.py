@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from imbox import Imbox
-from .models import Person,OutgoingEmail,IncomingEmail
+from .models import Person,OutgoingEmail,IncomingEmail,LastMessage
 from datetime import datetime
 from django.template.loader import render_to_string
 from . import forms
@@ -21,13 +21,18 @@ def inbox(request):
       ssl_context=None,
       starttls=False )
     
-    last_message = IncomingEmail.objects.last()
-    last_message_date = datetime.strptime('1990,1,1 +03:00','%Y,%m,%d %z')
+    last_message = IncomingEmail.objects.first()
+    ll=LastMessage.objects.all()[0]
+    
     if last_message != None:
-        last_message_date = last_message.date
+        ll.date = last_message.date
+        ll.save()
+    last_message_date =ll.date
 
     all_inbox_messages = imbox.messages()
-   
+    print('************************')
+    print(last_message_date)
+    print('************************')
 
     for uid, message in all_inbox_messages:
         d=message.date.replace('(GMT)','').strip()
@@ -35,7 +40,7 @@ def inbox(request):
        
         if date > last_message_date  :
             print(date)
-            uid = uid
+            #uid = message.message_id.replace('<','').replace('@mail.gmail.com>','')
             subject = message.subject
             from_name = message.sent_from[0]['name']
             from_email = message.sent_from[0]['email']
@@ -45,7 +50,7 @@ def inbox(request):
             body_html = message.body['html'][0]
             date = date
             incoming = IncomingEmail(
-                uid=uid,
+                uid= uid,
                 subject=subject,
                 from_name = from_name,
                 from_email = from_email,
@@ -57,7 +62,8 @@ def inbox(request):
                 )
             incoming.save()
                  
-    inbox_mails = IncomingEmail.objects.order_by('date').reverse()
+    inbox_mails = IncomingEmail.objects.all()
+
     my_incoming = []
     all_incoming = []      
     for mail in inbox_mails:
@@ -85,6 +91,7 @@ def create(request,**args):
             if len(args)>0:
                 reply = args['reply']
                 uid = args['uid']
+                print(uid)
                 incoming_mail = IncomingEmail.objects.get(uid=uid)
                 incoming_mail.reply_persons.add(person)
                 subject = 'Re: {}'.format(incoming_mail.subject)
@@ -103,8 +110,8 @@ def create(request,**args):
                 to_name = ''
                 if 'to' in  form.data:
                     
-                    html_content = render_to_string('mails/template_message.html', {'to':form.data['to'],'body':form.data['body'],'name':form.data['name']})
-                    body_plain = form.data['to'] + form.data['body'] + form.data['name']
+                    html_content = render_to_string('mails/template_message.html', {'to':form.data['to'],'body':form.data['body'],'name':form.data['name'],'dept':form.data['dept']})
+                    body_plain = form.data['to'] + form.data['body'] + form.data['name'] + form.data['dept']
                 else:
                     html_content = form.data['body_html']
                     body_plain = form.data['body_html']
