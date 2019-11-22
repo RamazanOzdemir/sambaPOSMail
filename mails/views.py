@@ -1,4 +1,5 @@
 from django.shortcuts import render,redirect
+from django.http import JsonResponse,HttpResponse
 from imbox import Imbox
 from .models import Person,OutgoingEmail,IncomingEmail,LastMessage
 from datetime import datetime
@@ -7,7 +8,8 @@ from . import forms
 from django.core.mail import send_mail,EmailMessage,get_connection
 import uuid
 from django.contrib.auth.decorators import login_required
-
+from django.core import serializers
+import json
 @login_required(login_url='/account/login/')
 def inbox(request):
     user = request.user 
@@ -30,14 +32,11 @@ def inbox(request):
     last_message_date =ll.date
 
     all_inbox_messages = imbox.messages()
-    print('************************')
-    print(last_message_date)
-    print('************************')
+ 
 
     for uid, message in all_inbox_messages:
         d=message.date.replace('(GMT)','').strip()
         date=datetime.strptime(d,'%a, %d %b %Y %H:%M:%S %z')
-       
         if date > last_message_date  :
             print(date)
             #uid = message.message_id.replace('<','').replace('@mail.gmail.com>','')
@@ -72,10 +71,85 @@ def inbox(request):
         if person in reply_persons:
             my_incoming.append([mail,reply_persons])
 
-
+    inbox_mails= serializers.serialize('json',inbox_mails)
     return render(request,'mails/inbox.html',
-    {'inbox_mails':inbox_mails,'all_incoming':all_incoming,'my_incoming':my_incoming,
+    {'inbx_mails':inbox_mails,'all_incoming':all_incoming,'my_incoming':my_incoming,
     'all_persons':all_persons,'wait_to_reply':wait_to_reply,'is_super_person':person.is_Super_Person })
+
+def new_message(request):
+    user = request.user 
+    all_persons = Person.objects.all()
+    person = all_persons.get(person=user)
+    imbox = Imbox('imap.gmail.com',
+      username = 'dene6606@gmail.com',
+      password = 'Kartal1903',
+      ssl=True,
+      ssl_context=None,
+      starttls=False )
+
+    last_message = IncomingEmail.objects.first()
+    ll=LastMessage.objects.all()[0]
+    
+    if last_message != None:
+        ll.date = last_message.date
+        ll.save()
+    last_message_date =ll.date
+
+    all_inbox_messages = imbox.messages()
+
+    liste = []
+
+    for uid, message in all_inbox_messages:
+        d=message.date.replace('(GMT)','').strip()
+        date=datetime.strptime(d,'%a, %d %b %Y %H:%M:%S %z')
+        print('##############################################3')
+
+        if date > last_message_date  :
+            print(date)
+            #uid = message.message_id.replace('<','').replace('@mail.gmail.com>','')
+            subject = message.subject
+            from_name = message.sent_from[0]['name']
+            from_email = message.sent_from[0]['email']
+            to_name = message.sent_to[0]['name']
+            to_email = message.sent_to[0]['email']
+            body_plain = message.body['plain'][0]
+            body_html = message.body['html'][0]
+            date = date
+            incoming = IncomingEmail(
+                uid= uid,
+                subject=subject,
+                from_name = from_name,
+                from_email = from_email,
+                to_name = to_name,
+                to_email = to_email,
+                body_plain = body_plain,
+                body_html = body_html,
+                date = date,
+                )
+            incoming.save()
+
+    new_coming_message = IncomingEmail.objects.filter(date__gt=last_message_date ) 
+    reply_array = []
+    #my_incoming = []
+    #all_incoming = []      
+    for mail in new_coming_message:
+        reply_persons = mail.reply_persons.all()
+        reply_p= serializers.serialize('json',reply_persons)
+        reply_array.append(reply_p)
+        #if person in reply_persons:
+        #    my_incoming.append([mail,reply_persons])
+        #all_incoming.append([mail,reply_persons])
+
+
+
+    new_msg= serializers.serialize('json',new_coming_message)
+    print('************************')
+    print(new_coming_message)
+    print('************************')
+    reply_json = json.dumps(reply_array)
+    data = {'reply':reply_json,'new_msg':new_msg}
+    return JsonResponse(data)
+
 
 @login_required(login_url='/account/login/')
 def create(request,**args):

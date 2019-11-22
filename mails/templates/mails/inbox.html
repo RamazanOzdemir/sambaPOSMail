@@ -24,11 +24,16 @@
               <a class="nav-item nav-link text-danger tab__header" id="nav-wait-tab" data-toggle="tab" href="#nav-wait" role="tab" aria-controls="nav-wait" aria-selected="false" onclick="selectForm(this)" >Bana Yönlendirilen Mesajlar <span class="badge badge-danger ml-1">{{wait_to_reply.count}}</span></a>
             </div>
         </nav>
+        {% for m in inbox_mails %}
+            <ul id="list_span">
+                
+            </ul>>
+        {% endfor %}
         <div class="tab-content" id="nav-tabContent">
             <div class="tab-pane fade show active" id="nav-all" role="tabpanel" aria-labelledby="nav-all-tab">
                 <form action="{% url 'mails:delete' %}" method="POST"  id='nav-all-tab_form'>
                     {% csrf_token %}
-                    <ul class="list-group list-group-flush">
+                    <ul class="list-group list-group-flush" id='incoming'>
                     {% for mail in all_incoming %}
                     
                         <li class="list-group-item p-0">

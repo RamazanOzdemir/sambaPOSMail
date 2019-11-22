@@ -51,7 +51,79 @@
         
     </div>
 </body>
+
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script type="text/javascript">
+    setInterval(()=>{
+    console.log('sss')
+    $.ajax({
+        url: "{% url 'mails:new_message' %}",
+        type:  'GET',
+        dataType: 'json',
+        success: function (data) {
+        
+         console.log(JSON.parse(data['new_msg']))
+         addNewMessage(JSON.parse(data['new_msg']))   
+         //for(var i=0 ; i< data[1].length ; i++){
+         //    console.log(JSON.stringify(data[1][i]))
+         //}
+
+        }
+      })},
+      5000);
+    function addNewMessage(data_object){
+        for(var i = 0; i<data_object.length ; i++){
+            var data = data_object[i]['fields'];
+            console.log(data);
+            var id_li='d';
+            var prepend_id_li = '#d';
+            var id_link='f';
+            var prepend_id_link = '#f';
+            console.log(prepend_id_li);
+            var li = "<li class='list-group-item p-0'}> <a class='row text-info p-2'><input class='col-1 list__checkbox m-auto',name='message_checkbox_inbox',value=data.uid,type:'checkbox'><input/>"
+            var p1 ="<p class='col-2 list__name text-truncate'>" +data.from_name +"<p/>";
+            var p2 ="<p class='col-4 list__subject text-truncate'>" +data.subject+"<p/>";
+            var avatarDiv;
+            var p3 = "<p class=col-2 list__date'>" +data.date +"<p/>";
+            var li_item = li+p1+p2+avatarDiv+p3+'</a></li>'
+            $('#incoming').prepend(li_item);
+
+            //$('<li/>',{class:'list-group-item p-0',id:id_li}).prependTo('#incoming')
+            //$('<a/>',{class:'row text-info p-2',id:id_link,'href':"/mails/detail-mail/{{mail.0.uid}}/notReply"}).prependTo(prepend_id_li)
+            //$('<input/>',{class:'col-1 list__checkbox m-auto',name:'message_checkbox_inbox',value:data.uid,type:'checkbox'}).prependTo(prepend_id_link)
+            //$('<p/>',{class:'col-2 list__name text-truncate',text:data.from_name}).prependTo('#jquery_link'+data.date)
+            //$('<p/>',{class:"col-4 list__subject text-truncate text-truncate ",text:data.subject}).prependTo('#jquery_link'+data.date)
+            //$('<div/>',{class:"col-3 d-flex ",id:'avatr_div'+data.date}).prependTo('#jquery_link'+data.date)
+            ////for
+            //    //$('<p/>',{class:'rounded-circle text-white avatar_list ' ,style:'background:{{person.personColor}};',title:""}).prependTo('#avatr_div'+data.uid)
+            //$('<p/>',{class:'col-2 list__date',text:data.date}).prependTo('#jquery_link'+data.date)
+        }
+    }
+
+
+</script>
 </html>
+
+<li class="list-group-item p-0">
+        <a  class='row text-info p-2'
+        href="/mails/detail-mail/{{mail.0.uid}}/notReply")>
+            <input class='col-1 list__checkbox m-auto' name='message_checkbox_inbox' value="{{mail.0.uid}}" type="checkbox">
+            <p class="col-2 list__name text-truncate ">{{ mail.0.from_name}}</p>
+            <p class="col-4 list__subject text-truncate text-truncate ">{{ mail.0.subject}}</p>
+            <div class="col-3 d-flex " >
+                {% for person in mail.1 %}
+                    <p class='rounded-circle text-white avatar_list ' 
+                    style='background:{{person.personColor}};'
+                    data-toggle="tooltip" title="{{person.full_name}}"
+                    >
+                        {{person.avatar}}
+                    </p>
+                    
+                {% endfor%}
+            </div>
+            <p class="col-2 list__date">{{ mail.0.date}}</p>
+        </a>
+    </li>
