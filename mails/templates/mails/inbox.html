@@ -129,7 +129,7 @@
                   Seçili mailler silinsin  mi?
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-outline-danger " id='delete_button' name='inbox' type='submit' form='nav-all-tab_form'>SİL</i></button>
+                    <button type='submit' class="btn btn-outline-danger " id='delete_button' name='nav-all-tab_form'  onclick="submitFormToDelete(this)" >SİL</i></button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
                 </div>
               </div>
@@ -159,7 +159,7 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-outline-success " id='delete_button' name='inbox' type='submit' form='forward_form'>Yönlendir</i></button>
+                    <button class="btn btn-outline-success " id='delete_button' name='inbox'   form='forward_form'>Yönlendir</i></button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
                 </div>
               </div>
@@ -170,8 +170,7 @@
         const checkboxes = document.getElementsByName('message_checkbox_inbox');
         const selectForm = (e)=>{
             const btn = document.getElementById('delete_button');
-            console.log(e.id)
-            btn.setAttribute('form',e.id+'_form');
+            btn.setAttribute('name',e.id+'_form');
         };
         const toggle = (e)=>{
             for(let i = 0 ; i<checkboxes.length ; i++)
@@ -179,7 +178,6 @@
         }
 
         const forward = ()=>{
-            console.log(checkboxes)
             const form_forward = document.getElementById('forward_form');
             for(let i = 0; i < checkboxes.length; i++){
                 if(checkboxes[i].checked ){
@@ -187,7 +185,6 @@
                     item.setAttribute('type','hidden');
                     item.setAttribute('name','message_checkbox');
                     item.setAttribute('value',checkboxes[i].value);
-                    console.log(checkboxes[i])
                     form_forward.appendChild(item);
                 }
                 

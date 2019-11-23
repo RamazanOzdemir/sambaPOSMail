@@ -16,50 +16,6 @@ def inbox(request):
     all_persons = Person.objects.all()
     person = all_persons.get(person=user)
     wait_to_reply = person.wait_to_reply.order_by('-date').all()
-    imbox = Imbox('imap.gmail.com',
-      username = 'dene6606@gmail.com',
-      password = 'Kartal1903',
-      ssl=True,
-      ssl_context=None,
-      starttls=False )
-    
-    last_message = IncomingEmail.objects.first()
-    ll=LastMessage.objects.all()[0]
-    
-    if last_message != None:
-        ll.date = last_message.date
-        ll.save()
-    last_message_date =ll.date
-
-    all_inbox_messages = imbox.messages()
- 
-
-    for uid, message in all_inbox_messages:
-        d=message.date.replace('(GMT)','').strip()
-        date=datetime.strptime(d,'%a, %d %b %Y %H:%M:%S %z')
-        if date > last_message_date  :
-            print(date)
-            #uid = message.message_id.replace('<','').replace('@mail.gmail.com>','')
-            subject = message.subject
-            from_name = message.sent_from[0]['name']
-            from_email = message.sent_from[0]['email']
-            to_name = message.sent_to[0]['name']
-            to_email = message.sent_to[0]['email']
-            body_plain = message.body['plain'][0]
-            body_html = message.body['html'][0]
-            date = date
-            incoming = IncomingEmail(
-                uid= uid,
-                subject=subject,
-                from_name = from_name,
-                from_email = from_email,
-                to_name = to_name,
-                to_email = to_email,
-                body_plain = body_plain,
-                body_html = body_html,
-                date = date,
-                )
-            incoming.save()
                  
     inbox_mails = IncomingEmail.objects.all()
 
@@ -77,9 +33,6 @@ def inbox(request):
     'all_persons':all_persons,'wait_to_reply':wait_to_reply,'is_super_person':person.is_Super_Person })
 
 def new_message(request):
-    user = request.user 
-    all_persons = Person.objects.all()
-    person = all_persons.get(person=user)
     imbox = Imbox('imap.gmail.com',
       username = 'dene6606@gmail.com',
       password = 'Kartal1903',
@@ -97,15 +50,12 @@ def new_message(request):
 
     all_inbox_messages = imbox.messages()
 
-    liste = []
 
     for uid, message in all_inbox_messages:
         d=message.date.replace('(GMT)','').strip()
         date=datetime.strptime(d,'%a, %d %b %Y %H:%M:%S %z')
-        print('##############################################3')
 
         if date > last_message_date  :
-            print(date)
             #uid = message.message_id.replace('<','').replace('@mail.gmail.com>','')
             subject = message.subject
             from_name = message.sent_from[0]['name']
@@ -143,9 +93,6 @@ def new_message(request):
 
 
     new_msg= serializers.serialize('json',new_coming_message)
-    print('************************')
-    print(new_coming_message)
-    print('************************')
     reply_json = json.dumps(reply_array)
     data = {'reply':reply_json,'new_msg':new_msg}
     return JsonResponse(data)
@@ -205,7 +152,6 @@ def create(request,**args):
             )
             outgoing.save()
             outgoing.reply_persons.add(person)
-            #print(html_content)
             return redirect('mails:inbox')
     else:
        
@@ -255,8 +201,7 @@ def delete(request):
                 OutgoingEmail.objects.filter(uid = uid).delete()
             if 'outbox' in request.POST:
                 return redirect('mails:outbox')
-            print(check_list_inbox)
-    return redirect('mails:inbox')
+    return HttpResponse({})
 
 def forward(request):
     if request.method == 'POST':
@@ -269,8 +214,4 @@ def forward(request):
             for message_uid in check_list_message:
                 person.wait_to_reply.add(messages.get(uid=message_uid))
             
-        print('********************************')
-        print(check_list_person)
-        print(check_list_message)
-        print('***********************************')
         return redirect('mails:inbox')
