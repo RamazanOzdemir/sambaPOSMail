@@ -7,7 +7,7 @@
         <div class="container border-bottom border-info mb-2">
             <div class="row align-items-center mt-1 mb-1">
                 <input class='col-1 ' name='checkbox_inbox' type="checkbox" onclick="toggle(this)">
-                <button type="button" class="btn bg-translate" data-toggle="modal" data-target="#exampleModalScrollable">
+                <button type="button" class="btn bg-translate" data-toggle="modal" data-target="#delete_modal">
                     <i class="fas fa-trash-alt "></i>
                 </button>
                 {% if is_super_person %}
@@ -38,7 +38,7 @@
                     
                         <li class="list-group-item p-0">
                             <a  class='row text-info p-2'
-                            href="/mails/detail-mail/{{mail.0.uid}}/notReply")>
+                            href="/mails/detail-mail/{{mail.0.uid}}/inBox")>
                                 <input class='col-1 list__checkbox m-auto' name='message_checkbox_inbox' value="{{mail.0.uid}}" type="checkbox">
                                 <p class="col-2 list__name text-truncate ">{{ mail.0.from_name}}</p>
                                 <p class="col-4 list__subject text-truncate text-truncate ">{{ mail.0.subject}}</p>
@@ -68,7 +68,7 @@
                     {% for mail in my_incoming %}
                         <li class="list-group-item p-0">
                             <a  class='row text-warning p-2' 
-                            href="/mails/detail-mail/{{mail.0.uid}}/notReply")>
+                            href="/mails/detail-mail/{{mail.0.uid}}/inBox")>
                                 <input class='col-1 list__checkbox mt-auto' name='message_checkbox_inbox' value="{{mail.0.uid}}" type="checkbox">
                                 <p class="col-2 list__name text-truncate ">{{ mail.0.from_name}}</p>
                                 <p class="col-4 list__subject text-truncate ">{{ mail.0.subject}}</p>
@@ -117,7 +117,7 @@
                 </form>
             </div>
         </div>
-        <div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+        <div class="modal fade" id="delete_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable" role="document">
               <div class="modal-content">
                 <div class="modal-header">
@@ -129,7 +129,7 @@
                   Seçili mailler silinsin  mi?
                 </div>
                 <div class="modal-footer">
-                    <button type='submit' class="btn btn-outline-danger " id='delete_button' name='nav-all-tab_form'  onclick="submitFormToDelete(this)" >SİL</i></button>
+                    <button type='submit' class="btn btn-outline-danger " id='delete_button' name='nav-all-tab_form'  onclick="submitFormToDelete(this)" data-dismiss="modal" >SİL</i></button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
                 </div>
               </div>
@@ -145,7 +145,7 @@
                   </button>
                 </div>
                 <div class="modal-body">
-                    <form class="form-group" action="{% url 'mails:forward' %}" method='POST' id='forward_form'>
+                    <form class="form-group"  id='forward_form'>
                     {% csrf_token %}
                         <ul class="list-group list-group-flush">
                             {% for person in all_persons %}
@@ -159,7 +159,7 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-outline-success " id='delete_button' name='inbox'   form='forward_form'>Yönlendir</i></button>
+                    <button class="btn btn-outline-success " id='delete_button' name='inbox' onclick="forward_ajax(this)"  data-dismiss="modal">Yönlendir</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
                 </div>
               </div>
@@ -187,12 +187,20 @@
                     item.setAttribute('value',checkboxes[i].value);
                     form_forward.appendChild(item);
                 }
-                
             }
-            
-            
-            
         };
+        function forward_ajax(e){
+            console.log(e)
+            $.ajax({
+                type:'POST',
+                url:"{% url 'mails:forward' %}",
+                data : $('#forward_form').serialize(),
+                success: (event)=>{
+                    console.log('gönderildi');
+                }
+            })
+        };
+
         
     </script>  
 {% endblock %}

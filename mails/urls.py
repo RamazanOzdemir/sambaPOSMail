@@ -7,6 +7,7 @@ urlpatterns = [
     path('outbox/',views.outbox, name='outbox' ),
     path('create/',views.create, name='create' ),
     path('delete/',views.delete, name='delete' ),
+    path('delete/<str:back>/', views.delete, name='delete'),
     path('forward/',views.forward, name='forward' ),
     path('ajax_new_message/',views.new_message, name='new_message' ),
     #path('send-mail',views.sendMail, name='sendMail' ),

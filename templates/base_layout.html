@@ -71,7 +71,7 @@
 
         }
       })},
-      5000);
+      20000);
     function addNewMessage(data_object){
         for(var i = 0; i<data_object.length ; i++){
             var data = data_object[i]['fields'];
@@ -95,17 +95,20 @@
         }
     }
     function submitFormToDelete(e){
-        console.log(e.name)
-        $(`#${e.name}`).prepend('<span>eklendimi</span>')
-       $(document).on('submit',`#${e.name}`,function(e){
-           $.ajax({
-               type:'POST',
-               url:"{% url 'mails:delete' %}",
-               error:function(e){console.log(e)}
-           });
-       });
-
-    }
+        $('#delete_modal').hide()
+        console.log(e)
+        $.ajax({
+            type:'POST',
+            url:"{% url 'mails:delete' %}",
+            data : $(`#${e.name}`).serialize(),
+            success: (event)=>{
+                $(`#${e.name} a`).each(function() {
+                     if($(this).find('input').is(":checked"))
+                         $(this).hide();
+                });
+            }
+        })
+    };
 
 
 </script>

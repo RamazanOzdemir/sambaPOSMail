@@ -24,7 +24,9 @@
                 {% if incoming %}
                 <button  class="col-2 btn btn-outline-success btn-sm mr-2 detail__button" onclick={reply()}>CEVAPLA</button>
                 {% endif %}
-                <button  class="col-2 btn btn-outline-danger btn-sm mr-2 detail__button" onclick={reply()}>SİL</button>
+                <button  class="col-2 btn btn-outline-danger btn-sm mr-2 detail__button" data-toggle="modal" name='detail' data-target="#delete_modal">
+                    SİL
+                </button>
             </div>
             <iframe class="col-12 border detail__frame container-fluid mt-4" 
                 srcdoc='{{mail.body_html}}'></iframe>
@@ -40,6 +42,34 @@
                     </div>
                     <input type='submit' class='btn btn-secondary btn-sm btn-block col-11 mt-2' value='REPLY' id='submit_id'>
                 </form>
+
+            </div>
+            <form   id='detail-delete_form' class="col-2 p-0 m-0" action="{% url 'mails:delete' %}" method="POST">
+                {% csrf_token %}
+                <input  type="hidden" name="detail"  value="True" />
+                {% if reply == 'outBox' %}
+                    <input class="d-none " name='message_checkbox_outbox' value="{{mail.uid}}" type="checkbox" checked>
+                {% else %}
+                    <input class="d-none" name='message_checkbox_inbox' value="{{mail.uid}}" type="checkbox" checked>
+                {% endif %}
+            </form>
+            <div class="modal fade" id="delete_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-scrollable" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            Seçili mailler silinsin  mi?
+                        </div>
+                        <div class="modal-footer">
+                            <button type='submit' class="btn btn-outline-danger "  form="detail-delete_form"  >SİL</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

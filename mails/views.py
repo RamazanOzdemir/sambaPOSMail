@@ -41,21 +41,21 @@ def new_message(request):
       starttls=False )
 
     last_message = IncomingEmail.objects.first()
-    ll=LastMessage.objects.all()[0]
+    ll = LastMessage.objects.all()[0]
     
     if last_message != None:
         ll.date = last_message.date
         ll.save()
-    last_message_date =ll.date
-
+    last_message_date = ll.date
+    print(last_message_date)
     all_inbox_messages = imbox.messages()
 
 
     for uid, message in all_inbox_messages:
         d=message.date.replace('(GMT)','').strip()
-        date=datetime.strptime(d,'%a, %d %b %Y %H:%M:%S %z')
+        date=datetime.strptime(d , '%a, %d %b %Y %H:%M:%S %z')
 
-        if date > last_message_date  :
+        if date > last_message_date:
             #uid = message.message_id.replace('<','').replace('@mail.gmail.com>','')
             subject = message.subject
             from_name = message.sent_from[0]['name']
@@ -66,8 +66,8 @@ def new_message(request):
             body_html = message.body['html'][0]
             date = date
             incoming = IncomingEmail(
-                uid= uid,
-                subject=subject,
+                uid = uid,
+                subject = subject,
                 from_name = from_name,
                 from_email = from_email,
                 to_name = to_name,
@@ -77,7 +77,7 @@ def new_message(request):
                 date = date,
                 )
             incoming.save()
-
+            print('yenimail eklendi')
     new_coming_message = IncomingEmail.objects.filter(date__gt=last_message_date ) 
     reply_array = []
     #my_incoming = []
@@ -162,14 +162,14 @@ def create(request,**args):
 
 
 @login_required(login_url='/account/login/')
-def detail(request,uid,reply):
+def detail(request, uid, reply):
     mail =  IncomingEmail.objects.filter(uid=uid)
     incoming = True
     if len(mail) == 0:
         mail =  OutgoingEmail.objects.filter(uid=uid)
         incoming = False
     
-    return render(request,'mails/detail.html',{'mail':mail[0],'incoming':incoming ,'reply':reply})
+    return render(request,'mails/detail.html',{'mail': mail[0], 'incoming' :incoming, 'reply': reply})
 
 @login_required(login_url='/account/login/')
 def outbox(request):
@@ -187,8 +187,9 @@ def outbox(request):
     
     return render(request,'mails/outbox.html',{'outgoing_mails':all_outgoing,'my_outgoing_mails':my_outgoing})
 
-def delete(request):
+def delete(request ):
     if request.method == 'POST':
+        print(request.POST.get('detail'))
         check_list_inbox = request.POST.getlist('message_checkbox_inbox')
         check_list_outbox = request.POST.getlist('message_checkbox_outbox')
         if 'forward' in request.POST:
@@ -199,9 +200,16 @@ def delete(request):
                 IncomingEmail.objects.filter(uid = uid).delete()
             for uid in check_list_outbox: 
                 OutgoingEmail.objects.filter(uid = uid).delete()
-            if 'outbox' in request.POST:
+
+        if request.POST.get('detail'):
+            print(len(check_list_outbox) > 0)
+            if len(check_list_inbox) > 0:
+                return redirect('mails:inbox')
+            else:
+                print('dddd')
                 return redirect('mails:outbox')
-    return HttpResponse({})
+    return HttpResponse('Silme Başarılı')
+
 
 def forward(request):
     if request.method == 'POST':

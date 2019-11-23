@@ -7,7 +7,9 @@
         <div class="container border-bottom border-info mb-2">
             <div class="row align-items-center mt-1 mb-1">
                 <input class='col-1 ' name='message_checkbox_outbox' type="checkbox" onclick="toggle(this)">
-                <button class="btn bg-translate " type='submit' name='outbox' form='nav-out_all-tab_form' id='delete_button'><i class="fas fa-trash-alt "></i></button>
+                <button class="btn bg-translate " data-toggle="modal" name='outbox' data-target="#delete_modal" >
+                    <i class="fas fa-trash-alt "></i>
+                </button>
             </div>
         </div>
         <nav>
@@ -26,7 +28,7 @@
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item p-0 ">
                             <a  class='row text-info  p-2' 
-                            href="/mails/detail-mail/{{mail.0.uid}}/notReply/")>
+                            href="/mails/detail-mail/{{mail.0.uid}}/outBox/")>
                                 <input class='col-1 list__checkbox m-auto' name='message_checkbox_outbox' value="{{mail.0.uid}}" type="checkbox">
                                 <p class="col-2 list__name text-truncate ">{{ mail.0.to_email}}</p>
                                 <p class="col-4 list__subject text-truncate text-truncate ">{{ mail.0.subject}}</p>
@@ -54,7 +56,7 @@
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item p-0">
                             <a  class='row text-warning p-2 ' 
-                            href="/mails/detail-mail/{{mail.0.uid}}/notReply/")>
+                            href="/mails/detail-mail/{{mail.0.uid}}/outBox/")>
                                 <input class='col-1 list__checkbox m-auto' name='message_checkbox_outbox' value="{{mail.0.uid}}" type="checkbox">
                                 <p class="col-2 list__name text-truncate ">{{ mail.0.to_email}}</p>
                                 <p class="col-4 list__subject text-truncate ">{{ mail.0.subject}}</p>
@@ -77,12 +79,32 @@
                 </form>
             </div>
         </div>
+        <div class="modal fade" id="delete_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  Seçili mailler silinsin  mi?
+                </div>
+                <div class="modal-footer">
+                    <button type='submit' class="btn btn-outline-danger " id='delete_button' name='nav-out_all-tab_form'  onclick="submitFormToDelete(this)" data-dismiss="modal" >SİL</i></button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+                </div>
+              </div>
+            </div>
+        </div>
+
     </div>
     <script>
   
         const selectForm = (e)=>{
             const btn = document.getElementById('delete_button');
-            btn.setAttribute('form',e.id+'_form');
+            console.log(btn)
+            btn.setAttribute('name',e.id+'_form');
         };
         const toggle = (e)=>{
             checkboxes = document.getElementsByName('message_checkbox_outbox');
@@ -90,5 +112,6 @@
                 checkboxes[i].checked = e.checked;
            
         }
+
     </script>  
 {% endblock %}
